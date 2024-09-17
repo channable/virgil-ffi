@@ -1,0 +1,10 @@
+packages:
+    haskell/virgil.cabal
+
+-- Do not use hackage - all packages should be bundled with GHC via nix
+-- in order to make sure that we're using the same versions everywhere
+active-repositories: :none
+-- Only consider the `global` package DB (i.e. packages bundled with GHC),
+-- and specifically not include the `user` DB (i.e. packages installed into `~/.cabal`).
+package-dbs: clear, global
+tests: true

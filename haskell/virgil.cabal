@@ -1,0 +1,83 @@
+cabal-version:      3.6
+name:               virgil
+version:            0
+synopsis:           Expose a cross-language FFI
+description:
+
+category:           Other
+homepage:           https://github.com/channable/imaginator#readme
+bug-reports:        https://github.com/channable/imaginator/issues
+maintainer:         Channable
+build-type:         Simple
+extra-source-files: package.yaml
+
+source-repository head
+  type:     git
+  location: https://github.com/channable/hackathon
+
+common shared-options
+  ghc-options:
+    -Wall -O2 -Wincomplete-record-updates -Wincomplete-uni-patterns
+    -Wpartial-fields -Wunused-packages -j4 +RTS -A64m -RTS
+
+  default-language: GHC2021
+
+library
+  import:          shared-options
+  hs-source-dirs:  src
+
+  -- cabal-fmt: expand library -Debug.README
+  exposed-modules:
+    Virgil
+    Virgil.ByteBox
+    Virgil.SerializableException
+    Virgil.ForeignClosure
+    Virgil.Curry
+
+  autogen-modules: Paths_virgil
+  other-modules:   Paths_virgil
+  build-depends:
+    , aeson
+    , annotated-exception
+    , base
+    , bytestring
+    , cborg
+    , cborg-json
+    , deepseq
+    , vector
+    , unliftio
+
+foreign-library Example
+  type: native-shared
+  hs-source-dirs:      example
+  other-modules: 
+    Example
+
+  c-sources:       cbits/virgil_wrapper.c
+  ghc-options: -Wall -threaded
+  default-language:    GHC2021
+  build-depends:
+    , virgil
+    , async
+    , aeson
+    , annotated-exception
+    , base
+    , bytestring
+    , deepseq
+    , unliftio
+
+
+
+-- test-suite virgil-tests
+--   import:          shared-options
+--   type:            exitcode-stdio-1.0
+--   main-is:         Spec.hs
+--   autogen-modules: Paths_virgil
+--   ghc-options:     -rtsopts -threaded -with-rtsopts=-N
+
+--   -- cabal-fmt: expand tests -Spec
+--   other-modules:
+
+--   hs-source-dirs:  tests
+--   build-depends:
+--     , virgil
